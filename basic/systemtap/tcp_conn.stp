@@ -1,0 +1,16 @@
+global start_map;
+probe begin {
+    printf("probe begin!\n")
+}
+probe kernel.function("tcp_v4_connect"), kernel.function("tcp_v6_connect")
+{
+  printf("%s(%d) TCP connect to %s\n", execname(), pid(), inet_ntop(addr))
+  start_map[tid()] = gettimeofday_us()
+}
+
+probe kernel.function("tcp_finish_connect").return
+{
+  elapsed = gettimeofday_us() - start_map[tid()]
+  printf("%s(%d) TCP connected in %d us\n", execname(), pid(), elapsed)
+  delete start_map[tid()]
+}

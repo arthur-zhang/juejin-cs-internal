@@ -1,0 +1,11 @@
+probe begin {
+    printf("probe begin!\n")
+}
+probe syscall.openat
+{
+  printf("%s(%d) openat (%s)\n", execname(), pid(), argstr)
+}
+probe syscall.openat.return
+{
+  printf("%s(%d) openat return (%s)\n", execname(), pid(), retstr)
+}

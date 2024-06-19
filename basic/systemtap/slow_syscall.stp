@@ -1,0 +1,18 @@
+global start_map
+
+probe begin {
+    printf("probe begin!\n")
+}
+
+probe syscall.epoll_wait {
+  start_map[tid()] = gettimeofday_us()
+}
+
+probe syscall.epoll_wait.return
+{
+  t = gettimeofday_us()
+  elapsed = t - start_map[tid()]
+  if (elapsed > 1000000)
+    printf("%s(%d) %s took %d us\n", execname(), pid(), name, elapsed)
+  delete start_map[tid()]
+}

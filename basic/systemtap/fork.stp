@@ -1,0 +1,6 @@
+probe begin {
+    printf("probe, begin!\n")
+}
+probe syscall.open {
+
+}

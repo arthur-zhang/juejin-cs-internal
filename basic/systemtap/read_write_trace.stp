@@ -1,0 +1,20 @@
+global bytes_read, bytes_write
+probe begin {
+    printf("probe begin!\n")
+}
+probe syscall.read.return
+{
+  if ($return > 0) bytes_read[pid()] += $return
+}
+
+probe syscall.write.return
+{
+  if ($return > 0) bytes_write[pid()] += $return
+}
+
+probe timer.s(5)
+{
+  printf("%6s %10s %10s\n", "PID", "READ", "WRITE")
+  foreach (pid in bytes_read)
+    printf("%6d %10d %10d\n", pid, bytes_read[pid], bytes_write[pid])
+}
