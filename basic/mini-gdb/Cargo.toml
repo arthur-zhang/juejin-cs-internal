@@ -1,0 +1,17 @@
+[package]
+name = "rgdb"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+addr2line = "0.21.0"
+anyhow = "1.0.79"
+enum-iterator = "1.4.1"
+gimli = "0.28.1"
+libc = "0.2.151"
+memmap = "0.7.0"
+nix = { version = "0.27.1", features = ["process"] }
+object = "0.32.2"
+rustyline = "13.0.0"
